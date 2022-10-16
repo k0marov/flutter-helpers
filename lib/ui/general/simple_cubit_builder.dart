@@ -1,23 +1,23 @@
 import 'package:dartz/dartz.dart' show Either;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:helpers/logic/errors/bloc_state.dart';
 
 import '../../logic/core.dart';
 import '../../logic/entity/entity.dart';
-import '../../logic/errors/bloc_state.dart';
 import '../../logic/simple_cubit.dart';
 import '../errors/bloc_exception_listener.dart';
 import '../errors/state_switch.dart';
 
-typedef SimpleBuilderFactory<V extends Value> = Widget Function({
+typedef SimpleBuilderFactory = Widget Function<V extends Value>({
   required Future<UseCaseRes<V>> Function() load,
   required Widget Function(V, SimpleCubit<V>) loadedBuilder,
 });
 
-SimpleBuilderFactory<V> newSimpleBuilderFactory<V extends Value>(
-  BlocExceptionListenerFactory<SimpleCubit<V>, BlocState<V>> exceptionListener,
+SimpleBuilderFactory newSimpleBuilderFactory<V extends Value>(
+  BlocExceptionListenerFactory exceptionListener,
 ) =>
-    ({
+    <V extends Value>({
       required Future<UseCaseRes<V>> Function() load,
       required Widget Function(V, SimpleCubit<V>) loadedBuilder,
     }) =>
@@ -28,7 +28,7 @@ SimpleBuilderFactory<V> newSimpleBuilderFactory<V extends Value>(
         );
 
 class _SimpleCubitBuilder<V extends Value> extends StatelessWidget {
-  final BlocExceptionListenerFactory<SimpleCubit<V>, BlocState<V>> exceptionListener;
+  final BlocExceptionListenerFactory exceptionListener;
   final Future<Either<Exception, V>> Function() load;
   final Widget Function(V, SimpleCubit<V>) loadedBuilder;
   const _SimpleCubitBuilder({
@@ -42,7 +42,7 @@ class _SimpleCubitBuilder<V extends Value> extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider<SimpleCubit<V>>(
       create: (_) => SimpleCubit<V>(load),
-      child: exceptionListener(
+      child: exceptionListener<SimpleCubit<V>, BlocState<V>>(
         (s) => s.getException(),
         BlocBuilder<SimpleCubit<V>, BlocState<V>>(
           builder: (context, state) => stateSwitch<V>(

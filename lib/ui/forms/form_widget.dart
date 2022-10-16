@@ -8,15 +8,15 @@ import '../errors/bloc_exception_listener.dart';
 import '../errors/state_switch.dart';
 import '../general/style.dart';
 
-typedef FormWidgetFactory<V extends Value> = Widget Function(
+typedef FormWidgetFactory = Widget Function<V extends Value>(
   FormCubit<V> Function() cubitFactory,
   Widget Function(FormInfo<V>) bodyBuilder,
 );
 
-FormWidgetFactory<V> newFormWidgetFactory<V extends Value>(
-  BlocExceptionListenerFactory<FormCubit<V>, FormCubitState<V>> exceptionListener,
+FormWidgetFactory newFormWidgetFactory<V extends Value>(
+  BlocExceptionListenerFactory exceptionListener,
 ) =>
-    (cubitFactory, bodyBuilder) => _FormWidget(
+    <V extends Value>(cubitFactory, bodyBuilder) => _FormWidget(
           exceptionListener: exceptionListener,
           cubitFactory: cubitFactory,
           bodyBuilder: bodyBuilder,
@@ -34,7 +34,7 @@ class FormInfo<V extends Value> extends Equatable {
 }
 
 class _FormWidget<V extends Value> extends StatelessWidget {
-  final BlocExceptionListenerFactory<FormCubit<V>, FormCubitState<V>> exceptionListener;
+  final BlocExceptionListenerFactory exceptionListener;
   final FormCubit<V> Function() cubitFactory;
   final Widget Function(FormInfo<V>) bodyBuilder;
   const _FormWidget({
@@ -67,7 +67,7 @@ class _FormWidget<V extends Value> extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (_) => cubitFactory(),
-      child: exceptionListener(
+      child: exceptionListener<FormCubit<V>, FormCubitState<V>>(
         (s) => s.exception,
         BlocBuilder<FormCubit<V>, FormCubitState<V>>(
           builder: (context, state) => _buildForm(context, state),

@@ -5,15 +5,15 @@ import '../../logic/auth/auth_facade.dart';
 import '../../logic/errors/errors.dart';
 import 'exception_snackbar.dart';
 
-typedef BlocExceptionListenerFactory<B extends BlocBase<S>, S> = Widget Function(
+typedef BlocExceptionListenerFactory = Widget Function<B extends BlocBase<S>, S>(
   Exception? Function(S) getException,
   Widget child,
 );
 
-BlocExceptionListenerFactory<B, S> newBlocExceptionListenerFactory<B extends BlocBase<S>, S>(
+BlocExceptionListenerFactory newBlocExceptionListenerFactory(
   AuthFacade auth,
 ) =>
-    (getException, child) => _BlocExceptionListener<B, S>(
+    <B extends BlocBase<S>, S>(getException, child) => _BlocExceptionListener<B, S>(
           auth: auth,
           getException: getException,
           child: child,
