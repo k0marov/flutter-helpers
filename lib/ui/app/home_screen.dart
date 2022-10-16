@@ -1,7 +1,14 @@
+import 'package:dartz/dartz.dart' show Tuple2;
 import 'package:flutter/material.dart';
 
+typedef MainScreens = List<Tuple2<Widget, BottomNavigationBarItem>>;
+
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  final MainScreens screens;
+  const HomeScreen({
+    Key? key,
+    required this.screens,
+  }) : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -10,15 +17,13 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   int _currentIndex = 0;
 
-  static const screens = []; // TODO: add screens here
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: screens[_currentIndex],
+      body: widget.screens[_currentIndex].value1,
       resizeToAvoidBottomInset: true,
       bottomNavigationBar: BottomNavigationBar(
-        items: const <BottomNavigationBarItem>[],
+        items: widget.screens.map((screen) => screen.value2).toList(),
         currentIndex: _currentIndex,
         selectedItemColor: Colors.blue,
         onTap: (ind) => setState(() => _currentIndex = ind),

@@ -2,7 +2,7 @@ name: helpers
 description: Helpers for a Flutter project, including state management, htpp, ui, theme brightness, testing, auth, etc.
 
 publish_to: 'none'
-version: 1.0.2
+version: 1.0.3
 
 environment:
   sdk: ">=2.17.6 <3.0.0"
