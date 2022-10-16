@@ -12,6 +12,7 @@ class AuthGate extends StatelessWidget {
   const AuthGate({
     Key? key,
     required this.auth,
+    required this.homeScreen, 
     required this.authScreen,
     required this.splashScreen,
   }) : super(key: key);
